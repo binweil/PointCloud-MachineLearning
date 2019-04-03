@@ -58,8 +58,13 @@ void cloud_cb (const pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud,
 
       // send a goal to the action
       SVMclassifierGoal goal;
+<<<<<<< Updated upstream
       //pcl::PointCloud<pcl::VFHSignature308>::Ptr inputDescriptor = p.getDescriptor();  //Causing error
       for(int idx=0;idx<306;idx++)
+=======
+      pcl::PointCloud<pcl::VFHSignature308>::Ptr inputDescriptor = p.getDescriptor();
+      for(size_t idx=0;idx<306;idx++)
+>>>>>>> Stashed changes
       {
           //goal.order.push_back((float)inputDescriptor->points[0].histogram[idx]);
       }

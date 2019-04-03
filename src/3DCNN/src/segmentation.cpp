@@ -9,7 +9,11 @@ void cloud_segment (const pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud)
     double tolerance =0.03 ;
     int minClustersSize =100;
     int maxClustersSize =25000;
+<<<<<<< Updated upstream
     std::string segmented_file_path = "/home/lamy/Desktop/PCD_MachineLearning/src/3DCNN/Segmented_Cloud/";
+=======
+    std::string segmented_file_path = "/home/lamy/Documents/GitKraken/PCD_MachineLearning/src/3DCNN/Segmented_Cloud/";
+>>>>>>> Stashed changes
 
     printf("Received Cloud");
     pcl::PointCloud<pcl::PointXYZ>::Ptr newCloud(new pcl::PointCloud<pcl::PointXYZ>);
@@ -38,5 +42,5 @@ void cloud_segment (const pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud)
     }
     someCloud->width=1;
     someCloud->height=someCloud->points.size();
-    pcl::io::savePCDFileASCII(segmented_file_path+"segmented_cloud.pcd",*someCloud);
+    //pcl::io::savePCDFileASCII(segmented_file_path+"segmented_cloud.pcd",*someCloud);
 } //END cloud_cb

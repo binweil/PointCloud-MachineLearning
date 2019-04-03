@@ -50,7 +50,11 @@
           <item>
            <widget class="QRadioButton" name="radioButton">
             <property name="text">
+<<<<<<< Updated upstream
              <string>Pedestrain</string>
+=======
+             <string>RadioButton</string>
+>>>>>>> Stashed changes
             </property>
            </widget>
           </item>
@@ -73,7 +77,11 @@
           <item>
            <widget class="QRadioButton" name="radioButton_2">
             <property name="text">
+<<<<<<< Updated upstream
              <string>Obstructions</string>
+=======
+             <string>RadioButton</string>
+>>>>>>> Stashed changes
             </property>
            </widget>
           </item>
@@ -96,7 +104,11 @@
           <item>
            <widget class="QRadioButton" name="radioButton_3">
             <property name="text">
+<<<<<<< Updated upstream
              <string>Point Cloud Only</string>
+=======
+             <string>RadioButton</string>
+>>>>>>> Stashed changes
             </property>
            </widget>
           </item>
@@ -225,7 +237,7 @@
   <customwidget>
    <class>QVTKWidget</class>
    <extends>QWidget</extends>
-   <header>QVTKWidget.h</header>
+   <header>qvtkwidgets.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
