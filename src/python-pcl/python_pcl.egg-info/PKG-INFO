@@ -1,0 +1,14 @@
+Metadata-Version: 1.2
+Name: python-pcl
+Version: 0.3
+Summary: pcl wrapper
+Home-page: http://github.com/strawlab/python-pcl
+Author: John Stowers
+Author-email: john.stowers@gmail.com
+Maintainer: Tooru Oonuma
+Maintainer-email: t753github@gmail.com
+License: BSD
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6

@@ -23,3 +23,8 @@
 			make install
             source Venv/bin/activate
             rosrun 3DCNN 3DCNN_node
+
+#### Datasets
+- shapeNet
+- kitti vision benchmark suite
+- CSDN https://blog.csdn.net/u014636245/article/details/83269939
