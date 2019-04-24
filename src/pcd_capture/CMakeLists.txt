@@ -16,13 +16,11 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 )
 FIND_PACKAGE(PCL 1.7 REQUIRED)
-find_package(RTABMap 0.19.1 REQUIRED)
+find_package(RTABMap 0.19 REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core Gui Svg QUIET)
 find_package(VTK REQUIRED)
 find_package(OpenCV REQUIRED)
-
 catkin_package(
-
 )
 
 # include directories
@@ -32,8 +30,6 @@ SET(INCLUDE_DIRS
     ${catkin_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
 )
-
-message("include='${RTABMap_INCLUDE_DIRS}'")
 
 add_definitions(${PCL_DEFINITIONS})
 
@@ -48,7 +44,6 @@ SET(SOURCES
     src/viewer.cpp
     src/viewer.ui
     src/cloudcapture.cpp
-
     src/mainwindow.ui
     src/mainwindow.cpp
     src/main.cpp
@@ -72,3 +67,7 @@ SET(LIBRARIES
 
 add_executable(pcd_capture_node ${SOURCES} ${INCLUDE_DIRECTORIES})
 target_link_libraries(pcd_capture_node ${LIBRARIES})
+
+
+add_executable(sampling src/mesh2pcd.cpp ${INCLUDE_DIRECTORIES})
+target_link_libraries(sampling ${LIBRARIES})

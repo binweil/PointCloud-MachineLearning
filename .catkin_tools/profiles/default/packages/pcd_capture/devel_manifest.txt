@@ -1,0 +1,5 @@
+pcd_capture
+/home/lamy/Documents/GitKraken/PCD_MachineLearning/devel/.private/pcd_capture/share/pcd_capture/cmake/pcd_captureConfig.cmake /home/lamy/Documents/GitKraken/PCD_MachineLearning/devel/share/pcd_capture/cmake/pcd_captureConfig.cmake
+/home/lamy/Documents/GitKraken/PCD_MachineLearning/devel/.private/pcd_capture/share/pcd_capture/cmake/pcd_captureConfig-version.cmake /home/lamy/Documents/GitKraken/PCD_MachineLearning/devel/share/pcd_capture/cmake/pcd_captureConfig-version.cmake
+/home/lamy/Documents/GitKraken/PCD_MachineLearning/devel/.private/pcd_capture/lib/pcd_capture/pcd_capture_node /home/lamy/Documents/GitKraken/PCD_MachineLearning/devel/lib/pcd_capture/pcd_capture_node
+/home/lamy/Documents/GitKraken/PCD_MachineLearning/devel/.private/pcd_capture/lib/pkgconfig/pcd_capture.pc /home/lamy/Documents/GitKraken/PCD_MachineLearning/devel/lib/pkgconfig/pcd_capture.pc

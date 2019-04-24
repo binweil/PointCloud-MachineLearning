@@ -1,5 +1,5 @@
-
 #include "segmentation.h"
+
 void cloud_segment (const pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud)
 {
     double voxelLeafSize =0.005;
@@ -9,7 +9,7 @@ void cloud_segment (const pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud)
     double tolerance =0.03 ;
     int minClustersSize =100;
     int maxClustersSize =25000;
-    std::string segmented_file_path = "/home/lamy/Desktop/PCD_MachineLearning/src/3DCNN/Segmented_Cloud/";
+    std::string segmented_file_path = "/home/lamy/Desktop/PCD_MachineLearning/Segmented_Cloud/";
 
     printf("Received Cloud");
     pcl::PointCloud<pcl::PointXYZ>::Ptr newCloud(new pcl::PointCloud<pcl::PointXYZ>);

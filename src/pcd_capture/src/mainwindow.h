@@ -81,19 +81,22 @@ private:
     bool processingStatistics_;
     bool lastOdometryProcessed_;
 
+    float scale;
+    bool showcoord = true;
+
+
 protected:
   PointCloudT::Ptr cloud;
   pcl::PointCloud<pcl::PointXYZ>::Ptr inputcloud;
   QString fileName;
-  //QFuture<void> cloud_segment_f = QtConcurrent::run(cloud_segment,inputcloud);
-
-  QFuture<void>svm_trainer_f;
+  //QFuture<void> cloud_segment_f;// = QtConcurrent::run(cloud_segment,inputcloud);
+ // QFuture<void>svm_trainer_f;
 
 private slots:
   void on_actionOpen_triggered();
-  void on_PredictButton_clicked();
-  void on_SegButton_clicked();
-  void on_TrainButton_clicked();
+  //void on_PredictButton_clicked();
+  //void on_SegButton_clicked();
+  //void on_TrainButton_clicked();
 
   virtual void pauseDetection();
   virtual void processOdometry(const rtabmap::OdometryEvent & odom);
@@ -101,6 +104,12 @@ private slots:
   virtual bool handleEvent(UEvent * event);
 
   void on_saveButton_clicked();
+  //void on_radioButton_clicked(bool checked);
+  void on_resetButton_clicked();
+  void on_actionload_triggered();
+  void on_predictButton_clicked();
+  void on_pushButton_clicked();
+  void on_segButton_2_clicked();
 };
 
 

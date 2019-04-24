@@ -95,11 +95,11 @@
 #include "pcl/surface/mls.h"
 
 using namespace std;
-
+using namespace rtabmap;
 class CloudCapture
 {
 public:
-    std::string prefix = "/home/lamy/Documents/GitKraken/pointcloud_perception";
+    std::string prefix = "/home/lamy/Desktop/PCD_MachineLearning";
 
     void create_mesh(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,pcl::PolygonMesh &mesh);
     bool lamy_savePolygonFileSTL (const std::string &file_name,
@@ -110,7 +110,7 @@ public:
     void cloudPointFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud,pcl::PointCloud<pcl::PointXYZ>::Ptr& filterCloud);
     void createOctomap(std::string pcdfilename);
     void Create_Cubes(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_transform,float upperbound);
-    void save_cloud(std::map<int, Signature> nodes, std::map<int, Transform> optimizedPoses, std::multimap<int, Link> links);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr save_cloud(std::map<int, Signature> nodes, std::map<int, Transform> optimizedPoses, std::multimap<int, Link> links);
     void toMesh(pcl::PointCloud<pcl::PointXYZRGB> cloud);
 
 private:

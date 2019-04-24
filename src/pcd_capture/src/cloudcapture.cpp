@@ -67,7 +67,7 @@ void CloudCapture::create_mesh(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
     pcl::PolygonMesh ms2;
 
     pcl::PCDWriter writer;
-    writer.write ("/home/rflin/Desktop/BINWEI/catkin_ws/cloud_convex_hull.pcd", *cloud_hull, false);
+    writer.write ("/home/lamy/Desktop/PCD_MachineLearning/cloud_convex_hull.pcd", *cloud_hull, false);
    // pcl::io::savePolygonFilePLY("cloud_convex_hull2.ply", ms2, false);
 
   pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ> ());
@@ -315,7 +315,8 @@ void CloudCapture::Create_Cubes(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_transf
 }
 
 
-void CloudCapture::save_cloud(std::map<int, Signature> nodes, std::map<int, Transform> optimizedPoses, std::multimap<int, Link> links){
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr CloudCapture::save_cloud(std::map<int, Signature> nodes, std::map<int, Transform> optimizedPoses, std::multimap<int, Link> links){
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr saved_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     for(std::map<int, Transform>::iterator iter=optimizedPoses.begin(); iter!=optimizedPoses.end(); ++iter)
     {
@@ -342,7 +343,8 @@ void CloudCapture::save_cloud(std::map<int, Signature> nodes, std::map<int, Tran
     {
      printf("Voxel grid filtering of the assembled cloud (voxel=%f, %d points)\n", 0.01f, (int)cloud->size());
      cloud = util3d::voxelize(cloud, 0.01f);
-
+     copyPointCloud(*cloud,*saved_cloud);
+     std::cout << "Saving Path: " << prefix << "/data/kinect_original.pcd" << std::endl;
      pcl::io::savePCDFile(prefix+"/data/kinect_original.pcd", *cloud);
      printf("Saving kinect_original.pcd... done! (%d points)\n", (int)cloud->size());
 
@@ -362,6 +364,7 @@ void CloudCapture::save_cloud(std::map<int, Signature> nodes, std::map<int, Tran
     {
      printf("Saving rtabmap_trajectory.txt... failed!\n");
     }
+    return saved_cloud;
 }
 
 

@@ -162,7 +162,7 @@ void readFromFile(std::string DataFilePath,std::string Fname ,cv::Mat &Data){
 }
 
 void svm_trainer(std::string POSITIVE_CLASS){
-    std::string pkgPath = "/home/lamy/Desktop/PCD_MachineLearning/src/3DCNN";
+    std::string pkgPath = "/home/lamy/Desktop/PCD_MachineLearning/src/pcd_capture";
     printf("Trainning SVM\n");
     std::string PCD_BASE_PATH = "/home/lamy/Downloads/Dataset_RGBD/";
     bool parsePCD =true,trainSVM=true;

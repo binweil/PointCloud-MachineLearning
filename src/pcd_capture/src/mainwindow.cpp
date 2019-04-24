@@ -1,6 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+#include <sstream>
+#include "sqlite3.h"
+using namespace std;
+float minmaxPT[10][9];
+int j;
 MainWindow::MainWindow(CameraThread * camera,  Rtabmap * rtabmap, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -11,14 +19,14 @@ MainWindow::MainWindow(CameraThread * camera,  Rtabmap * rtabmap, QWidget *paren
     lastOdometryProcessed_(true)
 {
     ui->setupUi(this);
-    this->setWindowTitle("PCD Viewer");
+    this->setWindowTitle("Point Cloud Capturing and Predict Tool");
     // Set up the QVTK window
     viewer.reset (new pcl::visualization::PCLVisualizer ("viewer", false));
     ui->widget->SetRenderWindow (viewer->getRenderWindow ());
     viewer->setupInteractor (ui->widget->GetInteractor (), ui->widget->GetRenderWindow ());
     ui->widget->update();
 
-
+    if (camera!= nullptr){
     cloud_viewer = new CloudViewer(this);
     ui->verticalLayout_camera->addWidget(cloud_viewer);
     qRegisterMetaType<rtabmap::OdometryEvent>("rtabmap::OdometryEvent");
@@ -28,6 +36,8 @@ MainWindow::MainWindow(CameraThread * camera,  Rtabmap * rtabmap, QWidget *paren
     this->addAction(pause);
     pause->setShortcut(Qt::Key_Space);
     connect(pause, SIGNAL(triggered()), this, SLOT(pauseDetection()));
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -45,45 +55,57 @@ void MainWindow::on_actionOpen_triggered()
     viewer->addCoordinateSystem(1);
     viewer->resetCamera ();
     ui->widget->update ();
+    pcl::io::savePCDFile("/home/lamy/Desktop/PCD_MachineLearning/data/kinect_original.pcd",*cloud);
 }
 
-void MainWindow::on_PredictButton_clicked()
-{
-    fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/path/to/file/",tr("pcd Files (*.pcd)"));
-    inputcloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::io::loadPCDFile<pcl::PointXYZ> (fileName.toStdString(),*inputcloud);
-    viewer->removeAllShapes();
-    cloud_cb(inputcloud,viewer);
-    viewer->removeAllPointClouds();
-    viewer->addPointCloud(inputcloud,"inputcloud");
-    viewer->addCoordinateSystem(1);
-    viewer->resetCamera ();
-    ui->widget->update();
-}
+//void MainWindow::on_PredictButton_clicked()
+//{
+//    pcl::PointXYZ minPt, maxPt;
+//    fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/path/to/file/",tr("pcd Files (*.pcd)"));
+//    inputcloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+//    pcl::io::loadPCDFile<pcl::PointXYZ> (fileName.toStdString(),*inputcloud);
+//    viewer->removeAllShapes();
+//    cloud_cb(inputcloud,viewer);
+//    viewer->removeAllPointClouds();
+//    viewer->addPointCloud(inputcloud,"inputcloud");
+//    pcl::getMinMax3D(*inputcloud,minPt,maxPt);
+//    scale = std::max({std::abs(maxPt._PointXYZ::x-minPt._PointXYZ::x),std::abs(maxPt._PointXYZ::y-minPt._PointXYZ::y),std::abs(maxPt._PointXYZ::z-minPt._PointXYZ::z)});
+//    viewer->addCoordinateSystem(scale);
+//    viewer->resetCamera ();
+//    ui->widget->update();
+//}
 
-void MainWindow::on_SegButton_clicked()
-{
-    fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/path/to/file/",tr("pcd Files (*.pcd)"));
-    inputcloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::io::loadPCDFile<pcl::PointXYZ> (fileName.toStdString(),*inputcloud);
-    //cloud_segment_f.waitForFinished();
-    cloud_segment(inputcloud);
-}
+//void MainWindow::on_SegButton_clicked()
+//{
+//    fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/path/to/file/",tr("pcd Files (*.pcd)"));
+//    inputcloud.reset(new pcl::PointCloud<pcl::PointXYZ>);
+//    pcl::io::loadPCDFile<pcl::PointXYZ> (fileName.toStdString(),*inputcloud);
+//    //cloud_segment_f.waitForFinished();
+//    //cloud_segment(inputcloud);
+//    cloud_segment_f = QtConcurrent::run(cloud_segment,inputcloud);
+//    std::string fileName = "/home/lamy/Desktop/PCD_MachineLearning/data/kinect_original.pcd";
 
-void MainWindow::on_TrainButton_clicked()
-{
-    std::vector<std::string> possitive_class[4];
-    possitive_class->push_back("apple_1");
-    //possitive_class->push_back("banana_1");// = {,"banana_1","calculator_1","coffe_mug_1"};
-    possitive_class->push_back("bowl_1");
-    //possitive_class->push_back("calculator_1");
-    //possitive_class->push_back("coffe_mug_1");
-    for(int i=0; i<possitive_class->size();i++)
-    {
-    svm_trainer_f =QtConcurrent::run(svm_trainer,possitive_class->at(i));
-    //svm_trainer(possitive_class->at(i));
-    }
-}
+      //comment above
+//    pcl::PointCloud<pcl::PointXYZ>::Ptr inputcloud1;
+//    inputcloud1.reset(new pcl::PointCloud<pcl::PointXYZ>);
+//    pcl::io::loadPCDFile<pcl::PointXYZ> (fileName,*inputcloud1);
+//    cloud_segment(inputcloud1);
+//}
+
+//void MainWindow::on_TrainButton_clicked()
+//{
+//    std::vector<std::string> possitive_class[4];
+//    possitive_class->push_back("apple_1");
+//    //possitive_class->push_back("banana_1");// = {,"banana_1","calculator_1","coffe_mug_1"};
+//    possitive_class->push_back("bowl_1");
+//    //possitive_class->push_back("calculator_1");
+//    //possitive_class->push_back("coffe_mug_1");
+//    for(int i=0; i<possitive_class->size();i++)
+//    {
+//    //svm_trainer_f =QtConcurrent::run(svm_trainer,possitive_class->at(i));
+//    //svm_trainer(possitive_class->at(i));
+//    }
+//}
 
 
 void MainWindow::pauseDetection()
@@ -114,7 +136,6 @@ void MainWindow::processOdometry(const rtabmap::OdometryEvent & odom)
  {
    //Odometry lost
    cloud_viewer->setBackgroundColor(Qt::darkRed);
-
    pose = lastOdomPose_;
  }
  else
@@ -280,13 +301,22 @@ void MainWindow::on_saveButton_clicked()
 {
     // Save 3D map
     //printf("Saving rtabmap_cloud.pcd...\n");
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr saved_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     std::map<int, Signature> nodes;
     std::map<int, Transform> optimizedPoses;
     std::multimap<int, Link> links;
     rtabmap_->get3DMap(nodes, optimizedPoses, links, false, true);
     CloudCapture capture;
-    capture.save_cloud(nodes,optimizedPoses,links);
+    saved_cloud = capture.save_cloud(nodes,optimizedPoses,links);
 
+    viewer->removeAllPointClouds();
+    viewer->addPointCloud (saved_cloud, "saved_cloud");
+    viewer->addCoordinateSystem(1);
+    viewer->resetCamera ();
+    ui->widget->update ();
+
+    system("rm /home/lamy/Desktop/PCD_MachineLearning/Segmented_Cloud/*.pcd");
+    system("rosrun cloudsegment cloudsegment_node");
     // remove handlers
     //cloud_viewer.unregisterFromEventsManager();
     //rtabmapThread.unregisterFromEventsManager();
@@ -301,4 +331,90 @@ void MainWindow::on_saveButton_clicked()
     //pcl::PointCloud<pcl::PointXYZRGB> cloud;
     //pcl::io::loadPCDFile<pcl::PointXYZRGB>(capture.prefix+"/data/kinect_original.pcd", cloud );
     //capture.toMesh(cloud);
+}
+
+//void MainWindow::on_radioButton_clicked(bool checked)
+//{
+//    showcoord = !showcoord;
+//    std::cout << checked <<std::endl;
+//    std::cout << showcoord <<std::endl;
+//    if (showcoord){
+//        viewer->removeCoordinateSystem();
+//        viewer->resetCamera ();
+//        ui->widget->update();
+//    }else {
+//        viewer->addCoordinateSystem(scale);
+//        viewer->resetCamera();
+//        ui->widget->update();
+//    }
+
+//}
+
+void MainWindow::on_resetButton_clicked()
+{
+    //this->post(new OdometryResetEvent());
+    UEventsManager::post(new OdometryResetEvent());
+}
+
+
+static int sql_callback(void* data, int argc, char** argv, char** azColName)
+{
+    int i;
+    for (i = 0; i < argc; i++) {
+        minmaxPT[j][i] = strtof(argv[i],nullptr);
+    }
+    j++;
+    return 0;
+};
+
+void MainWindow::on_actionload_triggered()
+{
+   j=0;
+   sqlite3 *database;
+   std::string prefix = "/home/lamy/Desktop/PCD_MachineLearning";
+   std::string database_path = "/data/result";
+   sqlite3_open((prefix+database_path).c_str(),&database);
+   sqlite3_exec(database,"SELECT * FROM minmax",sql_callback,NULL,NULL);
+   sqlite3_close(database);
+   for (int id = 0; id <= j; id++){
+        viewer->addCube(minmaxPT[id][1],minmaxPT[id][4],minmaxPT[id][2],minmaxPT[id][5],minmaxPT[id][3],minmaxPT[id][6],1,1,1,"cube"+to_string(id));
+   }
+   ui->widget->update();
+}
+
+void MainWindow::on_predictButton_clicked()
+{
+    system("rm /home/lamy/Desktop/PCD_MachineLearning/Segmented_Cloud/*.pcd");
+    system("rosrun cloudsegment cloudsegment_node");
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    viewer->removeAllShapes();
+    j=0;
+    sqlite3 *database;
+    std::string prefix = "/home/lamy/Desktop/PCD_MachineLearning";
+    std::string database_path = "/data/result";
+    sqlite3_open((prefix+database_path).c_str(),&database);
+    sqlite3_exec(database,"SELECT * FROM minmax",sql_callback,NULL,NULL);
+    sqlite3_close(database);
+    for (int id = 0; id < j; id++){
+         viewer->addCube(minmaxPT[id][1],minmaxPT[id][4],minmaxPT[id][2],minmaxPT[id][5],minmaxPT[id][3],minmaxPT[id][6],1,1,1,"cube"+to_string(id));
+         PointT position(minmaxPT[id][1],minmaxPT[id][2],minmaxPT[id][3]);
+         cout << position << endl;
+         string name;
+         if (minmaxPT[id][7] == 1){
+             name = "CAR";
+         }else{
+             name = "Obstacle";
+         }
+         bool res = viewer->addText3D(name,position,0.3,1,1,1,"text"+to_string(id));
+    }
+    ui->widget->update();
+}
+
+void MainWindow::on_segButton_2_clicked()
+{
+    system("rm /home/lamy/Desktop/PCD_MachineLearning/Segmented_Cloud/*.pcd");
+    system("rosrun cloudsegment cloudsegment_node");
 }
